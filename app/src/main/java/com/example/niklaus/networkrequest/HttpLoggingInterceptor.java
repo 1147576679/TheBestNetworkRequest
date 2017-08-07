@@ -30,10 +30,7 @@ import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSource;
 
-/**
- * @author zhouqian
- * @since 20160721
- */
+
 @SuppressWarnings({"unused", "WeakerAccess"})
 public final class HttpLoggingInterceptor implements Interceptor {
 
