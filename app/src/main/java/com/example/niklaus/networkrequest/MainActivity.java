@@ -151,45 +151,6 @@ public class MainActivity extends AppCompatActivity {
         Flowable<Integer> ob1 = Flowable.just(1, 2, 3, 4, 5);
         Flowable<String> ob2 = Flowable.just("A", "B", "C", "D", "E");
         Flowable<String> ob3 = Flowable.just("X", "Y", "Z");
-//        Flowable.combineLatest(ob1, ob2, new BiFunction<Integer, String, String>() {
-//            @Override
-//            public String apply(@NonNull Integer integer, @NonNull String s) throws Exception {
-//                return " " + integer + s;
-//            }
-//        })
-//                .subscribe(new Consumer<String>() {
-//                    @Override
-//                    public void accept(String s) throws Exception {
-//                        System.out.println(s);
-//                    }
-//                });
-//        Flowable.concat(ob1, ob2, ob3)
-//                .subscribe(new Consumer<Serializable>() {
-//                    @Override
-//                    public void accept(Serializable serializable) throws Exception {
-//                        System.out.println(serializable.toString());
-//                    }
-//                });
-//        Flowable.empty()
-//                .subscribe(new Consumer<Object>() {
-//                    @Override
-//                    public void accept(Object o) throws Exception {
-//                        System.out.println("------>");
-//                    }
-//                });
-//        Flowable.interval(0, 1, TimeUnit.SECONDS)
-//                .filter(new Predicate<Long>() {
-//                    @Override
-//                    public boolean test(@NonNull Long aLong) throws Exception {
-//                        return aLong < 5;
-//                    }
-//                })
-//                .subscribe(new Consumer<Long>() {
-//                    @Override
-//                    public void accept(Long aLong) throws Exception {
-//                        System.out.println(aLong);
-//                    }
-//                });
         Observable.interval(0, 1, TimeUnit.SECONDS)
                 .filter(new Predicate<Long>() {
                     @Override
