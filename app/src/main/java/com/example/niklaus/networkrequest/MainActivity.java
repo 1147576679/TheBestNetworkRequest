@@ -69,6 +69,10 @@ public class MainActivity extends AppCompatActivity {
 //                s.request(1);
 //            }
 //        });
+        Observable.just(1, 2, 4)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 
     private void flowable() {
