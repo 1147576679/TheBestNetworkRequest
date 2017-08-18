@@ -5,4 +5,5 @@ package com.example.niklaus.networkrequest.rx2vm;
  */
 
 public class Rx2ResultHelper {
+    private static final int code = 200;
 }
