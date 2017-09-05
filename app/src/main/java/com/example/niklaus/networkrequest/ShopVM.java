@@ -1,5 +1,8 @@
 package com.example.niklaus.networkrequest;
 
+import com.example.ktrxvm.BaseRxViewModel;
+import com.example.ktrxvm.RxObserver;
+import com.example.ktrxvm.RxStreamHelper;
 import com.example.niklaus.networkrequest.rx2vm.DataCallback;
 import com.example.niklaus.networkrequest.rx2vm.Rx2Observer;
 import com.example.niklaus.networkrequest.rx2vm.Rx2StreamHelper;
@@ -13,16 +16,17 @@ import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 
 /**
  * Created by Niklaus on 2017/8/8.
  */
 
-public class ShopVM {
-    public void getData(int page, int pageSize, DataCallback<List<VO>> callback){
+public class ShopVM extends BaseRxViewModel{
+    public void getData(int page, int pageSize, DataCallback<List<VO>> callback) {
         ApiClient.getInstance().getApiService()
-                .you(page,pageSize)
+                .you(page, pageSize)
                 .compose(Rx2StreamHelper.<DTO>ob_io_main())
                 .flatMap(new Function<DTO, ObservableSource<List<VO>>>() {
                     @Override
@@ -33,16 +37,31 @@ public class ShopVM {
                 .subscribe(new Rx2Observer<>(callback));
     }
 
-    public void getDataFlow(int page, int pageSize, DataCallback<List<VO>> callback){
+    public void getDataFlow(int page, int pageSize, DataCallback<List<VO>> callback) {
         ApiClient.getInstance().getApiService()
-        .whatFuck(page,pageSize)
-        .compose(Rx2StreamHelper.<DTO>flow_io_main())
-        .flatMap(new Function<DTO, Publisher<List<VO>>>() {
-            @Override
-            public Publisher<List<VO>> apply(@NonNull DTO dto) throws Exception {
-                return Flowable.just(dto.data.trasform());
-            }
-        })
-        .subscribe(new Rx2Subcriber<>(callback));
+                .whatFuck(page, pageSize)
+                .compose(Rx2StreamHelper.<DTO>flow_io_main())
+                .flatMap(new Function<DTO, Publisher<List<VO>>>() {
+                    @Override
+                    public Publisher<List<VO>> apply(@NonNull DTO dto) throws Exception {
+                        return Flowable.just(dto.data.trasform());
+                    }
+                })
+                .subscribe(new Rx2Subcriber<>(callback));
+    }
+
+    public Disposable getYou(int page, int pageSize, com.example.ktrxvm.DataCallback<List<VO>> callback) {
+        return rxAdd(
+                ApiClient.getInstance().getApiService()
+                .you(page, pageSize)
+                .flatMap(new Function<DTO, ObservableSource<List<VO>>>() {
+                    @Override
+                    public ObservableSource<List<VO>> apply(DTO dto) throws Exception {
+                        return Observable.just(dto.data.trasform());
+                    }
+                })
+                .compose(RxStreamHelper.<List<VO>>io_main())
+                .subscribeWith(new RxObserver<>(callback))
+        );
     }
 }

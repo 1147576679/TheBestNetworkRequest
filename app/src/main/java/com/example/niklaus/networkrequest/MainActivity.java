@@ -1,9 +1,14 @@
 package com.example.niklaus.networkrequest;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
+import com.example.ktrxvm.DataCallback;
+import com.example.ktrxvm.RxStreamHelper;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +21,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
@@ -24,6 +30,7 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity {
 
     private ShopVM mShopVM;
+    private Disposable mDisposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +76,36 @@ public class MainActivity extends AppCompatActivity {
 //                s.request(1);
 //            }
 //        });
-        Observable.just(1, 2, 4)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+//        Observable.just(1, 2, 4)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe();
+//
+        if (mDisposable != null && !mDisposable.isDisposed()) {
+            RxStreamHelper.unSubscibe(mDisposable);
+        }
+        mDisposable = mShopVM.getYou(1, 20, new DataCallback<List<VO>>(this) {
+            @Override
+            public void onNext(List<VO> result) {
+                outputLog(result);
+            }
+
+            @Override
+            public void onError(String msg, @Nullable Throwable e) {
+                super.onError(msg, e);
+                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onTerminate() {
+                super.onTerminate();
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     private void flowable() {

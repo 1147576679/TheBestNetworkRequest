@@ -49,7 +49,7 @@ public class Rx2Subcriber<T> implements Subscriber<T> {
     }
 
     public void _onSubscribe(Subscription s){
-        mCallback.onSubscribe(s);
+
     }
 
 }
